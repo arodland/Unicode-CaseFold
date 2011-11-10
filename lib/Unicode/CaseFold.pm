@@ -13,6 +13,7 @@ use warnings;
 use 5.008001;
 
 use Unicode::UCD ();
+use Scalar::Util 1.11 ();
 
 use Exporter 'import';
 our @EXPORT_OK = qw(case_fold);
@@ -42,12 +43,23 @@ sub case_fold {
   return $out;
 }
 
-sub fc(;$) {
+sub fc {
   @_ = ($_) unless @_;
   goto \&case_fold;
 }
 
 BEGIN {
+
+  # Perl 5.10+ supports the (_) prototype which does the $_-defaulting for us,
+  # and handles "lexical $_". Older perl doesn't, but we can fake it fairly
+  # closely with a (;$) prototype. Older perl didn't have lexical $_ anyway.
+
+  if ($^V ge v5.10.0) {
+    Scalar::Util::set_prototype(\&fc, '_');
+  } else {
+    Scalar::Util::set_prototype(\&fc, ';$');
+  }
+
   unless ($ENV{PERL_UNICODE_CASEFOLD_PP}) {
     eval {
       our $VERSION;
