@@ -13,6 +13,10 @@ use 5.008001;
 
 use Unicode::UCD ();
 
+use Exporter 'import';
+our @EXPORT_OK = qw(case_fold);
+our @EXPORT = qw(fc);
+
 our $LEGACY_MAPPING = $^V lt v5.10.0;
 our $XS = 0;
 
