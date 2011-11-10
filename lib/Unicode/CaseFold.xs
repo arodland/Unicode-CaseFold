@@ -21,7 +21,7 @@ MODULE = Unicode::CaseFold    PACKAGE = Unicode::CaseFold
 PROTOTYPES: DISABLE
 
 SV *
-case_fold_xs(str)
+case_fold(str)
     SV *str
   CODE:
     STRLEN input_len, folded_len;
@@ -38,4 +38,3 @@ case_fold_xs(str)
     }
   OUTPUT:
     RETVAL
-

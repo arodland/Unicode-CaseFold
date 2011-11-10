@@ -1,18 +1,25 @@
 package Unicode::CaseFold;
 
 # ABSTRACT: Unicode case-folding made easy
-# VERSION
+BEGIN {
+  # VERSION
+}
 # AUTHORITY
 
 use strict;
 use warnings;
 
+use 5.008001;
+
 use Unicode::UCD ();
 
-my $WHICH_MAPPING = ($] >= 5.011 ? "full" : "mapping");
+our $LEGACY_MAPPING = $^V lt v5.10.0;
+our $XS = 0;
 
 sub case_fold {
   my ($string) = @_;
+
+  my $WHICH_MAPPING = $LEGACY_MAPPING ? 'mapping' : 'full';
 
   my $out = "";
 
@@ -30,7 +37,21 @@ sub case_fold {
   return $out;
 }
 
-require XSLoader;
-XSLoader::load(__PACKAGE__, $VERSION);
+sub fc(;$) {
+  @_ = ($_) unless @_;
+  goto \&case_fold;
+}
+
+BEGIN {
+  unless ($ENV{PERL_UNICODE_CASEFOLD_PP}) {
+    eval {
+      our $VERSION;
+      require XSLoader;
+      XSLoader::load(__PACKAGE__, $VERSION);
+      $XS = 1;
+      $LEGACY_MAPPING = 0;
+    };
+  }
+}
 
 1;
