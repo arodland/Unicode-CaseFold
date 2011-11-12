@@ -30,6 +30,7 @@ case_fold(str)
       folded[FOLDED_CHARSIZE + 1];
 
     RETVAL = newSV(input_len); /* We may need more, but we won't need less. */
+    SvPOK_only(RETVAL);
     SvUTF8_on(RETVAL);
 
     for ( ptr = in ; ptr < in + input_len ; ptr += UTF8SKIP(ptr) ) {
