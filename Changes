@@ -1,7 +1,12 @@
 Revision history for Unicode-CaseFold
 
 {{$NEXT}}
+
+Version 0.02: 2011-11-11
   * Pass tests with old versions of Test::More.
+  * Skip tests that require a newer version of Unicode than the running perl
+    can support.
+  * Fix a bug with $Unicode::CaseFold::SIMPLE_FOLDING being set improperly.
 
 Version 0.01: 2011-11-11
   * Initial release.
