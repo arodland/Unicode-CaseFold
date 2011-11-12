@@ -1,6 +1,7 @@
 Revision history for Unicode-CaseFold
 
 {{$NEXT}}
+  * Pass tests with old versions of Test::More.
 
 Version 0.01: 2011-11-11
   * Initial release.

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More;
+use Test::More tests => 113;
 use Unicode::CaseFold;
 
 # This one comes from the ICU project's test suite, more especifically
@@ -158,5 +158,3 @@ for (@test_table) {
     is( fc($orig), $fc_full, 'fc works' );
   }
 }
-
-done_testing;
