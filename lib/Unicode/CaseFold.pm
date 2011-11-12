@@ -20,13 +20,13 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(case_fold);
 our @EXPORT = qw(fc);
 
-our $LEGACY_MAPPING = $^V lt v5.10.0;
+our $SIMPLE_FOLDING = $^V lt v5.10.0;
 our $XS = 0;
 
 sub case_fold {
   my ($string) = @_;
 
-  my $WHICH_MAPPING = $LEGACY_MAPPING ? 'mapping' : 'full';
+  my $WHICH_MAPPING = $SIMPLE_FOLDING ? 'mapping' : 'full';
 
   my $out = "";
 
@@ -67,7 +67,7 @@ BEGIN {
       require XSLoader;
       XSLoader::load(__PACKAGE__, $VERSION);
       $XS = 1;
-      $LEGACY_MAPPING = 0;
+      $SIMPLE_FOLDING = 0;
     };
   }
 }
@@ -79,12 +79,14 @@ __END__
 =head1 DESCRIPTION
 
 This module provides Unicode case-folding for Perl. Case-folding is a tool
-that allows a program to make case-insensitive comparisons or do
+that allows a program to make case-insensitive string comparisons or do
 case-insensitive lookups.
 
 =head1 SYNOPSIS
 
-XXX TODO
+    use Unicode::CaseFold;
+    
+    my $folded = fc $string;
 
 =head2 What is Case-Folding?
 
@@ -143,27 +145,51 @@ won't case-fold C<$_> if called without an argument.
 
 =head1 VARIABLES
 
-=head2 $Unicode::CaseFolding::XS
+=head2 $Unicode::CaseFold::XS
 
 Whether the XS extension is in use. The pure-perl implementation is 5-10 times
-slower than the XS extension, and on versions of perl before 5.10.0 it can
-sometimes produce sub-optimal case-foldings.
+slower than the XS extension, and on versions of perl before 5.10.0 it will
+use simple case-folding instead of pure case-folding (see below).
 
-=head2 $Unicode::CaseFolding::LEGACY_MAPPING
+=head2 $Unicode::CaseFold::SIMPLE_FOLDING
 
 Is set to true if the perl version is prior to 5.10.0 and the XS extension is
-not available. In this case, C<fc> will produce incompatible case-foldings for
-a few characters.
+not available. In this case, C<fc> will perform a simple case-folding instead
+of a full case-folding. Although relatively few characters are affected,
+strings case-folded using simple folding might not compare equal to the
+corresponding strings case-folded with full folding, which may cause
+compatibility issues. 
+
+Furthermore, when simple folding is in use, some strings
+that would have case-folded to the same value when using full folding will
+instead case-fold to different values. For example, C<fc("Wei\x{df}")> and
+C<fc("Weiss")> both produce C<"weiss"> when full folding is in effect, but
+the former produces C<"wei\x{df}"> when using simple folding.
+
+If you want to check for this potentially dangerous situation, consult the
+C<$Unicode::CaseFold::SIMPLE_FOLDING> variable.
 
 =head1 COMPATIBILITY
 
-XXX Different Perl versions include different versions of the Unicode
-database.
+=over 4
 
-XXX LEGACY_MAPPING mode.
+=item *
 
-XXX Requires perl 5.8.1 or newer.
+C<Unicode::CaseFold> requires Perl 5.8.1 or newer.
 
+=item *
+
+Different versions of perl include different versions of the Unicode database,
+which is revised over time. If you are likely to be comparing strings that
+have been folded using different versions of perl, you may need to consult the
+changes for intervening Unicode standard versions to find out whether your
+code will work correctly.
+
+=item *
+
+C<Unicode::CaseFold> uses "simple" rather than "full" case-folding when
+operating in Pure-perl mode on perl versions previous to 5.10.0. For
+compatibility implications, see L</$Unicode::CaseFold::SIMPLE_FOLDING>.
 
 =head1 SEE ALSO
 
