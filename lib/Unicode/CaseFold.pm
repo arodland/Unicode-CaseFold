@@ -191,6 +191,8 @@ C<Unicode::CaseFold> uses "simple" rather than "full" case-folding when
 operating in Pure-perl mode on perl versions previous to 5.10.0. For
 compatibility implications, see L</$Unicode::CaseFold::SIMPLE_FOLDING>.
 
+=back
+
 =head1 SEE ALSO
 
 =over 4
