@@ -14,8 +14,9 @@ use 5.008001;
 
 use Unicode::UCD ();
 use Scalar::Util 1.11 ();
+use Exporter ();
 
-use Exporter 'import';
+our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(case_fold);
 our @EXPORT = qw(fc);
 
