@@ -14,7 +14,7 @@ use 5.008001;
 
 use Unicode::UCD ();
 use Scalar::Util 1.11 ();
-use Exporter ();
+require Exporter;
 
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(case_fold);
@@ -23,34 +23,33 @@ our @EXPORT = qw(fc);
 our $SIMPLE_FOLDING = $^V lt v5.10.0;
 our $XS = 0;
 
-sub case_fold {
-  my ($string) = @_;
-
-  my $WHICH_MAPPING = $SIMPLE_FOLDING ? 'mapping' : 'full';
-
-  my $out = "";
-
-  for my $codepoint (unpack "U*", $string) {
-    my $mapping = Unicode::UCD::casefold($codepoint);
-    my @cp;
-    if (!defined $mapping) {
-      @cp = ($codepoint);
-    } else {
-      @cp = map hex, split / /, $mapping->{$WHICH_MAPPING};
-    }
-    $out .= pack "U*", @cp;
+BEGIN {
+  unless ($ENV{PERL_UNICODE_CASEFOLD_PP}) {
+    local $@;
+    eval {
+      our $VERSION;
+      require XSLoader;
+      XSLoader::load(__PACKAGE__,
+        exists $Unicode::CaseFold::{VERSION}
+        ? ${ $Unicode::CaseFold::{VERSION} }
+        : ()
+      );
+      $SIMPLE_FOLDING = 0;
+    };
+    die $@ if $@ && $@ !~ /object version|loadable object/;
+    $XS = 1 unless $@;
   }
-
-  return $out;
+  if (!$XS) {
+    require Unicode::CaseFoldPP;
+  }
 }
 
 sub fc {
   @_ = ($_) unless @_;
-  goto \&case_fold;
+  goto &case_fold;
 }
 
 BEGIN {
-
   # Perl 5.10+ supports the (_) prototype which does the $_-defaulting for us,
   # and handles "lexical $_". Older perl doesn't, but we can fake it fairly
   # closely with a (;$) prototype. Older perl didn't have lexical $_ anyway.
@@ -59,16 +58,6 @@ BEGIN {
     Scalar::Util::set_prototype(\&fc, '_');
   } else {
     Scalar::Util::set_prototype(\&fc, ';$');
-  }
-
-  unless ($ENV{PERL_UNICODE_CASEFOLD_PP}) {
-    eval {
-      our $VERSION;
-      require XSLoader;
-      XSLoader::load(__PACKAGE__, $VERSION);
-      $XS = 1;
-      $SIMPLE_FOLDING = 0;
-    };
   }
 }
 
