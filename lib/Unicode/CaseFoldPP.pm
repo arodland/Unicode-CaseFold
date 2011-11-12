@@ -2,13 +2,16 @@ package Unicode::CaseFold;
 
 use strict;
 use warnings;
+use 5.008001;
 
-our $SIMPLE_FOLDING; # Declared in main module
+use Unicode::UCD ();
+
+our $SIMPLE_FOLDING = $^V lt v5.10.0;
 
 sub case_fold {
   my ($string) = @_;
 
-  my $WHICH_MAPPING = $SIMPLE_FOLDING ? 'mapping' : 'full';
+  my $WHICH_MAPPING = ($SIMPLE_FOLDING ? 'mapping' : 'full');
 
   my $out = "";
 

@@ -12,7 +12,6 @@ use warnings;
 
 use 5.008001;
 
-use Unicode::UCD ();
 use Scalar::Util 1.11 ();
 require Exporter;
 
@@ -20,7 +19,7 @@ our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(case_fold);
 our @EXPORT = qw(fc);
 
-our $SIMPLE_FOLDING = $^V lt v5.10.0;
+our $SIMPLE_FOLDING;
 our $XS = 0;
 
 BEGIN {
@@ -34,10 +33,10 @@ BEGIN {
         ? ${ $Unicode::CaseFold::{VERSION} }
         : ()
       );
-      $SIMPLE_FOLDING = 0;
     };
     die $@ if $@ && $@ !~ /object version|loadable object/;
     $XS = 1 unless $@;
+    $SIMPLE_FOLDING = 0 unless $@;
   }
   if (!$XS) {
     require Unicode::CaseFoldPP;
