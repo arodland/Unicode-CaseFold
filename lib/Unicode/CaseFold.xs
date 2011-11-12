@@ -29,10 +29,10 @@ case_fold(str)
       *ptr,
       folded[FOLDED_CHARSIZE + 1];
 
-    RETVAL = newSV(input_len); /* We may need more, but it's very unlikely we'll need less. */
+    RETVAL = newSV(input_len); /* We may need more, but we won't need less. */
     SvUTF8_on(RETVAL);
 
-    for ( ptr = in ; ptr - in < input_len ; ptr += UTF8SKIP(ptr) ) {
+    for ( ptr = in ; ptr < in + input_len ; ptr += UTF8SKIP(ptr) ) {
       to_utf8_fold(ptr, folded, &folded_len);
       sv_catpvn(RETVAL, folded, folded_len);
     }
