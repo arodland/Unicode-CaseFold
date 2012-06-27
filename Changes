@@ -1,6 +1,8 @@
 Revision history for Unicode-CaseFold
 
 {{$NEXT}}
+
+Version 0.03: 2012-06-27
   * Stop using the unsafe UTF8_MAXBYTES_CASE macro which could lead to
     buffer overruns (thanks khw).
 
