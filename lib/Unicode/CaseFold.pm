@@ -137,7 +137,7 @@ won't case-fold C<$_> if called without an argument.
 
 Whether the XS extension is in use. The pure-perl implementation is 5-10 times
 slower than the XS extension, and on versions of perl before 5.10.0 it will
-use simple case-folding instead of pure case-folding (see below).
+use simple case-folding instead of full case-folding (see below).
 
 =head2 $Unicode::CaseFold::SIMPLE_FOLDING
 
