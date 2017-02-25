@@ -73,7 +73,7 @@ case-insensitive lookups.
 =head1 SYNOPSIS
 
     use Unicode::CaseFold;
-    
+
     my $folded = fc $string;
 
 =head2 What is Case-Folding?
@@ -110,7 +110,7 @@ case-folding part of the process you use to normalize your keys before using
 them to access a database or data structure, you get case-insensitive lookup.
 
     $roles{fc "Samuel L. Jackson"} = ["Gin Rummy", "Nick Fury", "Mace Windu"];
-    
+
     $roles = $roles{fc "Samuel l. JACKSON"}; # Gets the data.
 
 =head1 EXPORTS
@@ -146,7 +146,7 @@ not available. In this case, C<fc> will perform a simple case-folding instead
 of a full case-folding. Although relatively few characters are affected,
 strings case-folded using simple folding might not compare equal to the
 corresponding strings case-folded with full folding, which may cause
-compatibility issues. 
+compatibility issues.
 
 Furthermore, when simple folding is in use, some strings
 that would have case-folded to the same value when using full folding will
