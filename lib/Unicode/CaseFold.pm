@@ -2,13 +2,13 @@ package Unicode::CaseFold;
 
 # ABSTRACT: Unicode case-folding for case-insensitive lookups.
 
+use strict;
+use warnings;
+
 BEGIN {
   # VERSION
 }
 # AUTHORITY
-
-use strict;
-use warnings;
 
 use 5.008001;
 
