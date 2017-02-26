@@ -146,7 +146,7 @@ not available. In this case, C<fc> will perform a simple case-folding instead
 of a full case-folding. Although relatively few characters are affected,
 strings case-folded using simple folding might not compare equal to the
 corresponding strings case-folded with full folding, which may cause
-compatibility issues. 
+compatibility issues.
 
 Furthermore, when simple folding is in use, some strings
 that would have case-folded to the same value when using full folding will
