@@ -73,7 +73,7 @@ case-insensitive lookups.
 =head1 SYNOPSIS
 
     use Unicode::CaseFold;
-    
+
     my $folded = fc $string;
 
 =head2 What is Case-Folding?
@@ -110,7 +110,7 @@ case-folding part of the process you use to normalize your keys before using
 them to access a database or data structure, you get case-insensitive lookup.
 
     $roles{fc "Samuel L. Jackson"} = ["Gin Rummy", "Nick Fury", "Mace Windu"];
-    
+
     $roles = $roles{fc "Samuel l. JACKSON"}; # Gets the data.
 
 =head1 EXPORTS
