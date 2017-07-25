@@ -1,6 +1,8 @@
 Revision history for Unicode-CaseFold
 
 {{$NEXT}}
+
+Version 1.01: 2017-07-25
   * Fix a deprecation warning about toFOLD_utf8 in 5.26 (this should also
     prevent trouble when the current version is removed in 5.30).
 
